@@ -1,3 +1,6 @@
+# -*- coding: utf-8 -*-
+# Part of Odoo. See LICENSE file for full copyright and licensing details.
+
 from odoo import fields, models
 
 class AccountMove(models.Model):
@@ -11,8 +14,8 @@ class AccountMove(models.Model):
         curr_team = self.team_id
 
         commssion_rule = self.env['sales.commissions.rule']
-        user_rule = commssion_rule.search([('sales_person_id','=',curr_user.id)])
-        user_team = commssion_rule.search([('sales_team_id','=',curr_team.id)])
+        user_rule = commssion_rule.search([('sales_person_id', '=', curr_user.id)])
+        user_team = commssion_rule.search([('sales_team_id', '=', curr_team.id)])
 
         all_rules = user_rule + user_team
         priority_rules = sorted(all_rules,key=lambda r: r.sequence)
@@ -23,9 +26,9 @@ class AccountMove(models.Model):
             for rule in priority_rules:
                 if rule.product_id == line.product_id:
                     user_commission_amount = (rule.commission_rate * line.price_subtotal)/100
-                    if user_commission_amount>0 and rule.commission_for == 'salesperson':
-                        sales_person_id=curr_user.id
-                        sales_team_id=False
+                    if user_commission_amount > 0 and rule.commission_for == 'salesperson':
+                        sales_person_id = curr_user.id
+                        sales_team_id = False
                         break
            
         if user_commission_amount != 0:
@@ -44,8 +47,8 @@ class AccountMove(models.Model):
                 if rule.product_id == line.product_id:
                     team_commission_amount = (rule.commission_rate * line.price_subtotal)/100
                     if team_commission_amount > 0 and rule.commission_for == 'salesteam':
-                        sales_team_id=curr_team.id
-                        sales_person_id=False
+                        sales_team_id = curr_team.id
+                        sales_person_id = False
                         break
                     
         if team_commission_amount != 0:
